@@ -41,26 +41,18 @@ There's no router, state library, CSS framework or ORM; the app doesn't need the
 
 ## Running it locally
 
-**Prerequisites:** Python 3.10+ and Node.js 20+ (developed with Python 3.13 and Node 24).
+Requires Python 3.10+ and Node.js 20+. Run the backend and frontend in two separate terminals.
 
-Run the backend and frontend in separate terminals.
-
-### 1. Backend (runs on http://localhost:5001)
+**Backend** (http://localhost:5001), which imports the Elanco data on startup:
 
 ```bash
 cd backend
-python3 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
 
-On startup it creates `backend/ticks.db` and imports the Elanco data, logging something like
-`Elanco import: {'received': 1000, 'stored': 1000, 'skipped_invalid': 0, 'duplicates': 0}`.
-
-> It uses port 5001 because macOS uses port 5000 for AirPlay Receiver. To change it, run `PORT=xxxx python app.py` and update the proxy target in `frontend/vite.config.js`.
-
-### 2. Frontend (runs on http://localhost:5173)
+**Frontend** (http://localhost:5173), which you then open in a browser:
 
 ```bash
 cd frontend
@@ -68,17 +60,7 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**. The Vite dev server forwards `/api/*` requests to the backend, so no extra setup is needed.
-
-### Running the tests
-
-```bash
-cd backend
-source .venv/bin/activate
-python -m pytest
-```
-
-The tests use a temporary database and fake the Elanco API, so they run offline.
+**Tests:** run `python -m pytest` in `backend/` with the virtual environment active.
 
 ## API reference
 
@@ -93,20 +75,6 @@ All responses are JSON. Errors always have the form `{"error": "...", "details":
 | POST | `/api/sightings` | Report a sighting. Body: `{"date": "2025-06-01T14:30", "location": "Leeds", "species": "Marsh tick", "notes": "optional"}` |
 | GET | `/api/stats/regions` | Count and latest sighting per city (accepts the same filters) |
 | GET | `/api/stats/trends` | Counts over time. `interval=week\|month`, plus the same filters |
-
-Examples:
-
-```bash
-curl "http://localhost:5001/api/sightings?city=London&start=2024-01-01&end=2024-12-31"
-```
-
-```bash
-curl "http://localhost:5001/api/stats/trends?city=Leeds&interval=month"
-```
-
-```bash
-curl -X POST http://localhost:5001/api/sightings -H "Content-Type: application/json" -d '{"date":"2025-06-01","location":"Leeds","species":"Marsh tick"}'
-```
 
 ## Project structure
 
