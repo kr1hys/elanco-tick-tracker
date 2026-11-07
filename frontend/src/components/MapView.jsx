@@ -5,8 +5,17 @@ import { colourAt, NONE_COLOUR, scaleFor } from './colourScale'
 
 const UK_CENTRE = [54.3, -2.5]
 
-function radiusFor(count, max) {
-  return max ? 8 + 18 * Math.sqrt(count / max) : 8
+const MIN_RADIUS = 8 // quietest city (still easy to click)
+const MAX_RADIUS = 30 // busiest city
+const NONE_RADIUS = 6 // no matching sightings
+
+// Size runs from the quietest city to the busiest, like the colour scale, so
+// differences stay visible even when every city has a similar count. Circle *area*
+// grows in step with the count, so big circles don't look bigger than they should.
+function radiusFor(count, min, max) {
+  if (count === 0) return NONE_RADIUS
+  const t = scaleFor(count, min, max)
+  return Math.sqrt(MIN_RADIUS ** 2 + t * (MAX_RADIUS ** 2 - MIN_RADIUS ** 2))
 }
 
 // One city circle. Leaflet draws it as an SVG shape the browser can already Tab to,
@@ -73,7 +82,7 @@ export default function MapView({ regions, selectedCity, onSelect }) {
             key={r.city}
             region={r}
             selected={r.city === selectedCity}
-            radius={radiusFor(r.count, max)}
+            radius={radiusFor(r.count, min, max)}
             fillColor={r.count === 0 ? NONE_COLOUR : colourAt(scaleFor(r.count, min, max))}
             onSelect={onSelect}
           />

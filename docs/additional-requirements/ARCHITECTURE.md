@@ -69,9 +69,10 @@ On the frontend, `api.js` turns every failure (including "can't reach the server
 
 - **Kept simple.** There's no page routing or extra state library. `App.jsx` remembers the few things the whole page needs: which tab is open, which city is selected, the filters and the city totals. After a new report is saved, the map and panel reload so the report appears straight away.
 - **The map** draws a circle for each city.
-  - **Size:** circles grow with the number of sightings, but by *area* rather than width (using a square root), so the busiest cities don't swamp the map. Every circle also has a minimum size, so quiet cities stay clickable.
-  - **Colour:** a smooth yellow → orange → red scale from the quietest city to the busiest, explained by a "Least → Most" key. The scale runs from the lowest count to the highest, not from zero, so you can still see differences when all cities are similar.
-  - **Grey** means no sightings match the current filters.
+  - **Size** and **colour** both run from the quietest city to the busiest, not from zero. With all 1,000 sightings, cities range from 57 to 95. Measured from zero, those all looked about the same size; measured from 57 to 95, the differences are easy to see. The trade-off is that sizes show how cities *compare*, not exact amounts, so the exact number is in each circle's tooltip and on the city buttons.
+  - **Size:** the quietest city gets the smallest circle (still easy to click) and the busiest the largest. In between, the circle's *area* grows in step with the count, so big circles don't look bigger than they should.
+  - **Colour:** a smooth yellow → orange → red scale, explained by a "Least → Most" key.
+  - **Grey, smaller dots** mean no sightings match the current filters.
   - **Zoom** is by the +/− buttons, double-click or pinch, not the scroll wheel, so scrolling the page doesn't get stuck on the map.
 - **The filters** (date range and species, including unknown species) use the backend's filters. The circles, city counts, the "Showing N sightings" line and the city panel all update together. If "From" is after "To", you get an error and the previous filters stay, so the map never goes blank by mistake.
 - **The city panel** loads that city's sightings and uses them for the species breakdown and the recent list. Its chart (by year, or the last 24 months) gets its numbers from the trends endpoint, and periods with no sightings show as zero instead of disappearing.
