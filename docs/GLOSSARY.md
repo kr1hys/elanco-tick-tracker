@@ -1,6 +1,6 @@
 # Glossary
 
-Technical words used in this project, explained simply. Useful for reading the docs and for the interview.
+Technical words used in this project's documentation, explained simply for readers who aren't developers, such as vets or pet owners interested in the project.
 
 ## General
 
