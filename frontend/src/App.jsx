@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { getMeta, getRegions } from './api'
 import Legend from './components/Legend'
 import MapView from './components/MapView'
+import ReportForm from './components/ReportForm'
 import Sidebar from './components/Sidebar'
 
 const TABS = [
   { id: 'map', label: 'Sightings map' },
+  { id: 'report', label: 'Report a sighting' },
 ]
 
 export default function App() {
@@ -70,6 +72,9 @@ export default function App() {
               <aside className="panel sidebar muted">Select a city to see its sightings, trends and species.</aside>
             )}
           </section>
+        )}
+        {tab === 'report' && (
+          <ReportForm meta={meta} onSubmitted={() => setRefreshKey((k) => k + 1)} />
         )}
       </main>
 

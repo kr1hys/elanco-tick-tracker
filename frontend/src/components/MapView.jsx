@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css'
 const UK_CENTRE = [54.3, -2.5]
 
 // Activity levels: marker size AND colour AND text label, so meaning never relies on colour alone.
-export function activityLevel(count, max) {
+function activityLevel(count, max) {
   const ratio = max ? count / max : 0
   if (ratio >= 0.8) return { label: 'High', colour: '#c0392b' }
   if (ratio >= 0.6) return { label: 'Medium', colour: '#e67e22' }

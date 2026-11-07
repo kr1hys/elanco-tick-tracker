@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { getSightings, getTrends } from '../api'
 import TrendChart from './TrendChart'
 
-export const formatDate = (iso) =>
+const formatDate = (iso) =>
   new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
 export default function Sidebar({ city, region, refreshKey, onClose }) {
