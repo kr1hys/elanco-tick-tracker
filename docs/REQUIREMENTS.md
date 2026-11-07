@@ -42,7 +42,7 @@ UK tick sighting data, and a React front end that maps it, explains it, and lets
 
 ### 2.4 Submission validation (`POST /api/sightings`)
 - `date` – required, valid ISO date/time, not in the future.
-- `location` – required, must be one of the known cities.
+- `location` – required, chosen from a dropdown of the 14 known cities (validated server-side too).
 - `species` – required, must be one of the known species (latin name derived server-side).
 - `notes` – optional, max 500 characters.
 
@@ -53,23 +53,31 @@ Brief requires ≥2 items per area; selected:
 | Area | Features |
 |---|---|
 | Interactive map | UK map (Leaflet + OpenStreetMap) with one marker per city; marker size/colour reflects sighting count |
-| Sighting information | Sidebar panel on marker click (city details + recent sightings); timeline/trend of activity for that city |
+| Sighting information | Sidebar panel on marker click (city details + recent sightings); small monthly trend chart (Recharts) for that city |
 | Educational content | Species identification guide (the 5 species in the data); tick-bite prevention tips |
-| Report a sighting | Form (date, city, species, notes); client-side validation with clear error / warning / success messages, plus server errors shown |
+| Report a sighting | Form (date, city dropdown, species dropdown, notes); client-side validation with clear error / warning / success messages, plus server errors shown |
 
 ### Accessibility (basics)
 - All form inputs have labels; errors announced via `aria-live`.
 - Everything reachable by keyboard; visible focus styles.
 - Sufficient colour contrast; marker meaning not conveyed by colour alone (size + text).
 
-## 4. Out of scope (documented as future improvements)
+## 4. Secrets
+- No API keys or credentials are needed: the Elanco API is public (no auth) and OpenStreetMap tiles need no key.
+- `.env` is git-ignored in case any config is added later; nothing secret is committed.
+
+## 5. Testing
+- `pytest` tests for submission validation, importer dedupe/invalid-record handling, and the main endpoints (Elanco API mocked).
+
+## 6. Out of scope (documented as future improvements)
 - Image upload with reports
 - Map filter controls (date range / species) in the UI – the API supports them already
 - Directions / Share buttons, seasonal chart
 - Authentication, moderation of user reports, deployment/hosting
 - Precise geolocation of sightings (data is city-level only)
 
-## 5. Deliverables
+## 7. Deliverables
 - Public GitHub repo with README (project, technical choices, run instructions)
 - `docs/ARCHITECTURE.md` – decisions, data flow, future improvements
 - Walkthrough video (≤10 min) – recorded by Kieran
+- **Deadline: 2026-11-08, 9am**

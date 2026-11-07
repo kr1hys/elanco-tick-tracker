@@ -14,7 +14,7 @@
 - `flask` – web framework
 - `flask-cors` – allow the Vite dev server to call the API
 - `requests` – call the Elanco API with timeouts
-- `pytest` – a few tests for validation and endpoints *(dev only)*
+- `pytest` – tests for validation, importer and endpoints *(dev only)*
 
 Everything else (`sqlite3`, `datetime`, `logging`) is standard library.
 
@@ -22,7 +22,7 @@ Everything else (`sqlite3`, `datetime`, `logging`) is standard library.
 - `react`, `react-dom` – UI (from the Vite React template)
 - `vite`, `@vitejs/plugin-react` – dev server / build
 - `leaflet`, `react-leaflet` – map
-- `recharts` – the per-city trend chart *(proposed; could be a plain list instead)*
+- `recharts` – the small per-city monthly trend chart
 
 No router, state library, CSS framework or ORM – not needed at this size.
 
