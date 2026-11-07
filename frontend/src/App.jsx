@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getMeta, getRegions } from './api'
 import Legend from './components/Legend'
 import MapView from './components/MapView'
+import Sidebar from './components/Sidebar'
 
 const TABS = [
   { id: 'map', label: 'Sightings map' },
@@ -13,6 +14,7 @@ export default function App() {
   const [regions, setRegions] = useState([])
   const [selectedCity, setSelectedCity] = useState(null)
   const [error, setError] = useState(null)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   const loadRegions = useCallback(() => {
     getRegions().then((d) => setRegions(d.results)).catch((e) => setError(e.message))
@@ -21,7 +23,7 @@ export default function App() {
   useEffect(() => {
     getMeta().then(setMeta).catch((e) => setError(e.message))
     loadRegions()
-  }, [loadRegions])
+  }, [loadRegions, refreshKey])
 
   return (
     <>
@@ -61,6 +63,12 @@ export default function App() {
                 ))}
               </ul>
             </div>
+            {selectedCity ? (
+              <Sidebar city={selectedCity} region={regions.find((r) => r.city === selectedCity)}
+                refreshKey={refreshKey} onClose={() => setSelectedCity(null)} />
+            ) : (
+              <aside className="panel sidebar muted">Select a city to see its sightings, trends and species.</aside>
+            )}
           </section>
         )}
       </main>
