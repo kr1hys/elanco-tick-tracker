@@ -15,5 +15,8 @@ export function colourAt(t) {
 
 // Position of a count between the lowest and highest city counts.
 export function scaleFor(count, min, max) {
-  return max > min ? (count - min) / (max - min) : 1
+  if (max > min) return (count - min) / (max - min)
+  return max > 0 ? 0.5 : 0 // every city equal: use the middle of the scale
 }
+
+export const NONE_COLOUR = '#9aa5b1' // grey for cities with no matching sightings

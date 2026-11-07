@@ -12,7 +12,7 @@ Built for the **Elanco Placement Program – Full Stack technical task**.
 
 | Area | What's included |
 |---|---|
-| Interactive map | Map of UK sightings with one marker per city. Marker size and a yellow → orange → red colour gradient show how many sightings each city has, with a legend and tooltips. |
+| Interactive map | Map of UK sightings with one marker per city. Marker size and a yellow → orange → red colour gradient show how many sightings each city has, with a legend and tooltips. Filter by date range and species; the map, city counts and sidebar all update. |
 | Sighting information | Clicking a city opens a sidebar with totals, a trend chart (by year or last 24 months), a species breakdown and recent sightings. |
 | Educational content | Identification guide for the 5 species in the data, plus tick-bite prevention tips for people and pets. |
 | Report a sighting | Form with date, time, city and species dropdowns (including a "Not sure / unknown species" option for people who can't identify their tick) and notes. Shows per-field errors, non-blocking warnings and success messages, and the server validates submissions too. |

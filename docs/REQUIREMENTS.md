@@ -52,7 +52,7 @@ Brief requires ≥2 items per area; selected:
 
 | Area | Features |
 |---|---|
-| Interactive map | UK map (Leaflet + OpenStreetMap) with one marker per city; marker size and yellow → orange → red gradient reflect sighting count |
+| Interactive map | UK map (Leaflet + OpenStreetMap) with one marker per city; marker size and yellow → orange → red gradient reflect sighting count; filter controls for date range and species (added after the MVP) |
 | Sighting information | Sidebar panel on marker click (city details + recent sightings); small monthly trend chart (Recharts) for that city |
 | Educational content | Species identification guide (the 5 species in the data); tick-bite prevention tips |
 | Report a sighting | Form (date, city dropdown, species dropdown with a "Not sure / unknown species" option, notes); client-side validation with clear error / warning / success messages, plus server errors shown |
@@ -71,7 +71,6 @@ Brief requires ≥2 items per area; selected:
 
 ## 6. Out of scope (documented as future improvements)
 - Image upload with reports, especially for sightings reported as **unknown species**: the photo would let a professional (e.g. a vet or parasitologist reviewing reports) or the ML identifier below work out the species, after which the report is updated
-- Map filter controls (date range / species) in the UI – the API supports them already
 - Directions / Share buttons, seasonal chart
 - Authentication, moderation of user reports, deployment/hosting
 - Precise geolocation of sightings (data is city-level only)

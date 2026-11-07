@@ -1,6 +1,6 @@
 import { CircleMarker, MapContainer, TileLayer, Tooltip } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import { colourAt, scaleFor } from './colourScale'
+import { colourAt, NONE_COLOUR, scaleFor } from './colourScale'
 
 const UK_CENTRE = [54.3, -2.5]
 
@@ -11,7 +11,9 @@ function radiusFor(count, max) {
 export default function MapView({ regions, selectedCity, onSelect }) {
   const counts = regions.map((r) => r.count)
   const max = Math.max(0, ...counts)
-  const min = Math.min(max, ...counts)
+  // Scale over cities that have sightings, so a zero doesn't flatten the gradient.
+  const nonZero = counts.filter((c) => c > 0)
+  const min = nonZero.length ? Math.min(...nonZero) : 0
 
   return (
     <MapContainer center={UK_CENTRE} zoom={6} className="map" scrollWheelZoom={false}
@@ -30,7 +32,7 @@ export default function MapView({ regions, selectedCity, onSelect }) {
             pathOptions={{
               color: selected ? '#1d3557' : '#ffffff',
               weight: selected ? 4 : 2,
-              fillColor: colourAt(scaleFor(r.count, min, max)),
+              fillColor: r.count === 0 ? NONE_COLOUR : colourAt(scaleFor(r.count, min, max)),
               fillOpacity: 0.85,
             }}
             eventHandlers={{ click: () => onSelect(r.city) }}

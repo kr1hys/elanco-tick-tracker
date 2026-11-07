@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { getMeta, getRegions, getSightings } from './api'
+import { useEffect, useRef, useState } from 'react'
+import { getMeta, getRegions, getSightings, NO_FILTERS } from './api'
+import FilterBar from './components/FilterBar'
 import Legend from './components/Legend'
 import MapView from './components/MapView'
 import PreventionTips from './components/PreventionTips'
@@ -21,6 +22,7 @@ export default function App() {
   const [error, setError] = useState(null)
   const [refreshKey, setRefreshKey] = useState(0)
   const [speciesCounts, setSpeciesCounts] = useState({})
+  const [filters, setFilters] = useState(NO_FILTERS)
   const mainRef = useRef(null)
 
   // Move focus to the content when switching tabs, so keyboard/screen-reader users land there.
@@ -29,14 +31,16 @@ export default function App() {
     requestAnimationFrame(() => mainRef.current?.focus())
   }
 
-  const loadRegions = useCallback(() => {
-    getRegions().then((d) => setRegions(d.results)).catch((e) => setError(e.message))
-  }, [])
-
   useEffect(() => {
     getMeta().then(setMeta).catch((e) => setError(e.message))
-    loadRegions()
-  }, [loadRegions, refreshKey])
+  }, [refreshKey])
+
+  // Map markers and city counts follow the active filters.
+  useEffect(() => {
+    getRegions(filters)
+      .then((d) => { setRegions(d.results); setError(null) })
+      .catch((e) => setError(e.message))
+  }, [filters, refreshKey])
 
   // Per-species totals for the guide: limit=1 still returns the filtered total.
   useEffect(() => {
@@ -70,6 +74,8 @@ export default function App() {
             <div className="map-column">
               <h2 id="map-heading">Tick sightings across the UK</h2>
               <p className="muted">Click a city on the map (or pick one from the list) to see its details.</p>
+              <FilterBar meta={meta} filters={filters} onChange={setFilters}
+                total={regions.reduce((sum, r) => sum + r.count, 0)} />
               <MapView regions={regions} selectedCity={selectedCity} onSelect={setSelectedCity} />
               <Legend />
               {/* Keyboard/screen-reader friendly alternative to clicking map markers */}
@@ -87,7 +93,7 @@ export default function App() {
             </div>
             {selectedCity ? (
               <Sidebar city={selectedCity} region={regions.find((r) => r.city === selectedCity)}
-                refreshKey={refreshKey} onClose={() => setSelectedCity(null)} />
+                filters={filters} refreshKey={refreshKey} onClose={() => setSelectedCity(null)} />
             ) : (
               <aside className="panel sidebar muted">Select a city to see its sightings, trends and species.</aside>
             )}

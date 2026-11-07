@@ -33,6 +33,8 @@ async function request(path, options = {}) {
   return body
 }
 
+export const NO_FILTERS = { start: '', end: '', species: '' }
+
 function query(params) {
   const clean = Object.entries(params).filter(([, v]) => v !== undefined && v !== '' && v !== null)
   return clean.length ? `?${new URLSearchParams(clean)}` : ''
