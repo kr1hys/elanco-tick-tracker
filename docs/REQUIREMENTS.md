@@ -68,9 +68,3 @@ The full details are in [additional-requirements/ACCESSIBILITY.md](additional-re
 
 ## 6. What we left out
 Everything deliberately left out, and ideas for later, are in **[FUTURE_REQUIREMENTS.md](FUTURE_REQUIREMENTS.md)**.
-
-## 7. What we hand in
-- A public GitHub repo with a README (what the project is, the tools chosen and why, and how to run it).
-- `docs/additional-requirements/`: the brief's optional extras (architecture and accessibility).
-- A walkthrough video of up to 10 minutes, recorded by Kieran.
-- **Deadline: 8 November 2026, 9am.**
