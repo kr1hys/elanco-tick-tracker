@@ -7,15 +7,21 @@ venv/
 *.db
 *.sqlite3
 
-# Node
+# Node / frontend build
 node_modules/
 dist/
+dist-ssr/
+*.local
 
-# Uploads / OS / editors
-uploads/
+# Logs
+logs/
+*.log
+
+# OS / editors
 .DS_Store
 .vscode/
 .idea/
+*.sw?
 
 # Local tool config
 .claude/
