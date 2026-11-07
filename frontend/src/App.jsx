@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useState } from 'react'
-import { getMeta, getRegions } from './api'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { getMeta, getRegions, getSightings } from './api'
 import Legend from './components/Legend'
 import MapView from './components/MapView'
+import PreventionTips from './components/PreventionTips'
 import ReportForm from './components/ReportForm'
 import Sidebar from './components/Sidebar'
+import SpeciesGuide from './components/SpeciesGuide'
 
 const TABS = [
   { id: 'map', label: 'Sightings map' },
   { id: 'report', label: 'Report a sighting' },
+  { id: 'learn', label: 'Learn about ticks' },
 ]
 
 export default function App() {
@@ -17,6 +20,14 @@ export default function App() {
   const [selectedCity, setSelectedCity] = useState(null)
   const [error, setError] = useState(null)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [speciesCounts, setSpeciesCounts] = useState({})
+  const mainRef = useRef(null)
+
+  // Move focus to the content when switching tabs, so keyboard/screen-reader users land there.
+  const changeTab = (id) => {
+    setTab(id)
+    requestAnimationFrame(() => mainRef.current?.focus())
+  }
 
   const loadRegions = useCallback(() => {
     getRegions().then((d) => setRegions(d.results)).catch((e) => setError(e.message))
@@ -27,6 +38,15 @@ export default function App() {
     loadRegions()
   }, [loadRegions, refreshKey])
 
+  // Per-species totals for the guide: limit=1 still returns the filtered total.
+  useEffect(() => {
+    if (!meta) return
+    Promise.all(meta.species.map((sp) =>
+      getSightings({ species: sp.name, limit: 1 }).then((d) => [sp.name, d.total])))
+      .then((pairs) => setSpeciesCounts(Object.fromEntries(pairs)))
+      .catch(() => {}) // the guide still works without counts
+  }, [meta, refreshKey])
+
   return (
     <>
       <a href="#main" className="skip-link">Skip to main content</a>
@@ -35,14 +55,14 @@ export default function App() {
         <nav aria-label="Main">
           {TABS.map((t) => (
             <button key={t.id} className={`tab ${tab === t.id ? 'active' : ''}`}
-              aria-current={tab === t.id ? 'page' : undefined} onClick={() => setTab(t.id)}>
+              aria-current={tab === t.id ? 'page' : undefined} onClick={() => changeTab(t.id)}>
               {t.label}
             </button>
           ))}
         </nav>
       </header>
 
-      <main id="main" tabIndex={-1}>
+      <main id="main" tabIndex={-1} ref={mainRef}>
         {error && <p className="alert alert-error" role="alert">{error}</p>}
 
         {tab === 'map' && (
@@ -75,6 +95,13 @@ export default function App() {
         )}
         {tab === 'report' && (
           <ReportForm meta={meta} onSubmitted={() => setRefreshKey((k) => k + 1)} />
+        )}
+
+        {tab === 'learn' && (
+          <div className="learn">
+            <SpeciesGuide countsBySpecies={speciesCounts} />
+            <PreventionTips />
+          </div>
         )}
       </main>
 
