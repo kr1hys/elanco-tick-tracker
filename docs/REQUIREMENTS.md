@@ -1,79 +1,76 @@
-# Requirements – Elanco Tick Tracker (MVP)
+# Requirements
 
-A deliberately small full-stack app: a Python (Flask) API that imports, cleans and serves
-UK tick sighting data, and a React front end that maps it, explains it, and lets users report sightings.
+What the UK Tick Tracker needed to do, and the choices we made. It's a deliberately small app: a Python backend that downloads, cleans and serves the tick data, and a React frontend that shows it on a map, explains it, and lets people report sightings.
 
-## 1. Source data (Elanco API)
+## 1. The data we were given (Elanco's data service)
 
-- Base URL: `https://dev-task.elancoapps.com/data`
-- Endpoints used: `GET /tick-sightings` (full list), `GET /health`
-- Record shape: `{ id, date (ISO 8601, no timezone), location (UK city), species, latinName }`
-- Observed on 2026-11-07: 1,000 records, 14 cities, 5 species, dates 2012–2024,
-  no duplicates or missing fields. API can return `429` (rate limited) and `500`.
-- **No coordinates** are provided – the backend maps city → lat/lng with a fixed lookup table.
+- Address: `https://dev-task.elancoapps.com/data`. We use `/tick-sightings` (all sightings) and `/health`.
+- Each sighting has: an `id`, a `date` and time, a `location` (a UK city), a `species`, and its `latinName`.
+- When we checked on 7 November 2026, it had **1,000 sightings** across **14 cities** and **5 species**, dated 2012–2024, with no duplicates or missing information.
+- It can reply "too many requests" (error 429) or have a server error (500), so we handle both.
+- **There are no map coordinates**, only a city name, so we keep our own list of where each city is.
 
-## 2. Backend requirements
+## 2. Backend
 
-### 2.1 Data handling
-- On startup, fetch `/tick-sightings` once and store in **SQLite**.
-- Validate each record: all required fields present, date parses, city in lookup table.
-  Invalid records are skipped and counted in a log message (not stored).
-- Deduplicate by `id` (upsert – re-running the import never creates duplicates).
-- If the Elanco API is unreachable / errors / rate-limits, start anyway using whatever is
-  already in the database, and log a warning.
-- Imported records are marked `source = "elanco"`, user reports `source = "user"`.
+### 2.1 Handling the data
+- When the server starts, it downloads all sightings once and saves them in a **SQLite** database.
+- Every sighting is checked: it must have an id, a real date, and a city and species we recognise. Broken ones are skipped (not saved), and the server logs how many.
+- **Duplicates are removed:** if a sighting with the same id already exists, it's updated instead of added again, so downloading twice never creates copies.
+- **If Elanco's service is down** or slow, the server still starts and uses whatever data it already saved, and logs a warning.
+- Each sighting is marked as coming from Elanco (`elanco`) or from a user report (`user`).
 
-### 2.2 API endpoints (all JSON, prefixed `/api`)
-| Method | Path | Purpose |
+### 2.2 Endpoints (the addresses the frontend calls, all starting `/api`)
+| Request | Address | Purpose |
 |---|---|---|
-| GET | `/api/health` | Liveness check |
-| GET | `/api/meta` | Cities (with lat/lng) and species list, for the map and form dropdowns |
-| GET | `/api/sightings` | List sightings; filters: `start`, `end` (dates), `city`, `species` |
-| GET | `/api/sightings/<id>` | Single sighting |
-| POST | `/api/sightings` | Submit a new sighting report |
-| GET | `/api/stats/regions` | Sighting count per city (accepts same filters) |
-| GET | `/api/stats/trends` | Counts over time; `interval=week\|month`, optional `city`, `species` |
+| GET | `/api/health` | Check the server is running |
+| GET | `/api/meta` | Cities (with map positions) and species, for the map and the form's dropdowns |
+| GET | `/api/sightings` | List sightings, narrowed by `start` and `end` dates, `city` and `species` |
+| GET | `/api/sightings/<id>` | One sighting |
+| POST | `/api/sightings` | Save a new sighting report |
+| GET | `/api/stats/regions` | Number of sightings per city (same filters) |
+| GET | `/api/stats/trends` | Number of sightings per week or month (same filters) |
 
-### 2.3 Error handling
-- Consistent error body: `{ "error": "<message>", "details": {...optional field errors} }`.
-- `400` for bad query params or invalid submissions (with per-field messages), `404` for
-  unknown id/route, `500` for unexpected errors (no stack traces leaked).
-- External API failures handled as in 2.1 (timeouts set on every request).
+### 2.3 Errors
+- Every error reply looks the same: a short message, plus the problem with each field if there is one. For example: `{"error": "Invalid request", "details": {"date": "Date cannot be in the future."}}`.
+- **400** = something you sent was wrong. **404** = that sighting or address doesn't exist. **500** = something unexpected broke on the server. The user only sees a simple message; the details go in the server's log.
+- Every request to Elanco has a time limit and is retried a few times if it fails (see 2.1).
 
-### 2.4 Submission validation (`POST /api/sightings`)
-- `date` – required, valid ISO date/time, not in the future.
-- `location` – required, chosen from a dropdown of the 14 known cities (validated server-side too).
-- `species` – required, one of the known species (latin name derived server-side) **or `Unknown`**, so people who can't identify a tick can still report it. The Elanco import still requires a real species.
-- `notes` – optional, max 500 characters.
+### 2.4 Rules for a new report (`POST /api/sightings`)
+- **Date:** required, a real date (with an optional time), and not in the future.
+- **Location:** required, one of the 14 cities (picked from a dropdown, and checked again by the server).
+- **Species:** required, either one of the 5 species or **`Unknown`**, so people who can't identify their tick can still report it. Data imported from Elanco must still have a real species.
+- **Notes:** optional, up to 500 characters.
 
-## 3. Frontend requirements (React + Vite)
+## 3. Frontend
 
-Brief requires ≥2 items per area; selected:
+The brief asks for at least 2 features from each of 4 areas. We built:
 
-| Area | Features |
+| Area | What we built |
 |---|---|
-| Interactive map | UK map (Leaflet + OpenStreetMap) with one marker per city; marker size and yellow → orange → red gradient reflect sighting count; filter controls for date range and species (added after the MVP) |
-| Sighting information | Sidebar panel on marker click (city details + recent sightings); small monthly trend chart (Recharts) for that city |
-| Educational content | Species identification guide (the 5 species in the data); tick-bite prevention tips |
-| Report a sighting | Form (date, city dropdown, species dropdown with a "Not sure / unknown species" option, notes); client-side validation with clear error / warning / success messages, plus server errors shown |
+| Interactive map | A UK map with a circle for each city, whose size and colour (yellow → orange → red) show how many sightings it has; **plus** filters for date range and species (a third feature, added later) |
+| Sighting information | A side panel when you click a city, with its details and recent sightings; a chart of that city's activity over time (by year or the last 24 months) |
+| Educational content | A guide to the 5 tick species; tips for preventing tick bites |
+| Report a sighting | A form (date, city, species with a "Not sure" option, and notes); clear error, warning and success messages, including errors sent back by the server |
 
-### Accessibility (basics)
-- All form inputs have labels; errors announced via `aria-live`.
-- Everything reachable by keyboard; visible focus styles.
-- Sufficient colour contrast; marker meaning not conveyed by colour alone (size + text).
+### Accessibility
+- Every form field has a label, and errors are read out by screen readers.
+- Everything can be used with a keyboard. The map's circles can't be reached with the Tab key, so the city list under the map does the same job.
+- Good colour contrast, and the map never relies on colour alone: circle size and numbers show the same information.
+
+The full details are in [additional-requirements/ACCESSIBILITY.md](additional-requirements/ACCESSIBILITY.md).
 
 ## 4. Secrets
-- No API keys or credentials are needed: the Elanco API is public (no auth) and OpenStreetMap tiles need no key.
-- `.env` is git-ignored in case any config is added later; nothing secret is committed.
+- None needed: Elanco's service is public and the map is free.
+- Files that could hold secrets later (`.env`) are set to never be uploaded to GitHub.
 
 ## 5. Testing
-- `pytest` tests for submission validation, importer dedupe/invalid-record handling, and the main endpoints (Elanco API mocked).
+- Automatic tests (pytest) check that new reports are validated correctly, broken or duplicate data is handled, and every endpoint works. Elanco's service is faked in the tests, so they don't need the internet.
 
-## 6. Out of scope
-Everything deliberately left out of the MVP (including the future ML tick identifier, image upload and species photos) is listed in **[OUT_OF_SCOPE.md](OUT_OF_SCOPE.md)**.
+## 6. What we left out
+Everything deliberately left out, and ideas for later, are in **[FUTURE_REQUIREMENTS.md](FUTURE_REQUIREMENTS.md)**.
 
-## 7. Deliverables
-- Public GitHub repo with README (project, technical choices, run instructions)
-- `docs/additional-requirements/` – the brief's optional extras: `ARCHITECTURE.md` (decisions, data flow, future improvements) and `ACCESSIBILITY.md`
-- Walkthrough video (≤10 min) – recorded by Kieran
-- **Deadline: 2026-11-08, 9am**
+## 7. What we hand in
+- A public GitHub repo with a README (what the project is, the tools chosen and why, and how to run it).
+- `docs/additional-requirements/`: the brief's optional extras (architecture and accessibility).
+- A walkthrough video of up to 10 minutes, recorded by Kieran.
+- **Deadline: 8 November 2026, 9am.**

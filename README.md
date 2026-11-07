@@ -1,49 +1,51 @@
 # UK Tick Tracker
 
-A minimum viable product (MVP) web app that maps UK tick sightings, shows trends for each city, teaches users to identify ticks and avoid bites, and lets the public report new sightings.
+A simple web app that shows where ticks have been spotted around the UK, how that changes over time, how to recognise and avoid ticks, and lets anyone report a new sighting.
 
 Built for the **Elanco Placement Program – Full Stack technical task**.
 
 **Author:** Kieran
 
+> New to any of the technical words below? See the [Glossary](docs/GLOSSARY.md).
+
 ---
 
-## Features
+## What it does
 
-| Area | What's included |
+| Area | What you can do |
 |---|---|
-| Interactive map | Map of UK sightings with one marker per city. Marker size and a yellow → orange → red colour gradient show how many sightings each city has, with a legend and tooltips. Filter by date range and species; the map, city counts and sidebar all update. |
-| Sighting information | Clicking a city opens a sidebar with totals, a trend chart (by year or last 24 months), a species breakdown and recent sightings. |
-| Educational content | Identification guide for the 5 species in the data, plus tick-bite prevention tips for people and pets. |
-| Report a sighting | Form with date, time, city and species dropdowns (including a "Not sure / unknown species" option for people who can't identify their tick) and notes. Shows per-field errors, non-blocking warnings and success messages, and the server validates submissions too. |
-| Accessibility | Skip link, labelled inputs, error messages read out by screen readers, visible focus outlines, a keyboard-friendly city list as an alternative to the map, and markers whose meaning never relies on colour alone. See [ACCESSIBILITY.md](docs/additional-requirements/ACCESSIBILITY.md). |
+| **Map** | See every city's tick sightings on a UK map. Bigger, redder circles mean more sightings, explained by a "Least → Most" key. Filter by date range and species, and the whole page updates to match. |
+| **City details** | Click a city (on the map or in the list under it) to open a side panel with its total sightings, a chart of activity over time, which species were seen, and the most recent sightings. |
+| **Learn about ticks** | A guide to the 5 tick species in the data, plus tips for avoiding tick bites for you and your pets. |
+| **Report a sighting** | A simple form: date, city, species and optional notes. If you don't know the species, pick "Not sure / unknown species". The form tells you clearly what's wrong, warns you about things worth double-checking, and confirms when your report is saved. |
+| **Accessibility** | Works with a keyboard and screen reader, and nothing relies on colour alone. See [ACCESSIBILITY.md](docs/additional-requirements/ACCESSIBILITY.md). |
 
-Backend highlights:
-- Imports data from the Elanco API, checking each record, skipping bad ones and removing duplicates.
-- Keeps serving stored data if the external API is down.
-- Supports filtering by date range, city and species, and provides counts per region and weekly/monthly trends.
-- Returns consistent JSON error responses.
+Behind the scenes, the backend:
+- Downloads the sightings from Elanco's data service, throws away broken records and removes duplicates.
+- Keeps working with the data it already has if Elanco's service is down.
+- Lets the frontend search sightings by date, city and species, and get totals per city and per week or month.
+- Always replies with a clear, readable error message when something goes wrong.
 
-## Tech stack
+## What it's built with
 
-| Layer | Choice | Why |
+| Part | Tool | Why |
 |---|---|---|
-| Backend | **Python 3 + Flask** | Small and simple, which is all a handful of JSON endpoints needs |
-| Database | **SQLite** (Python standard library) | No setup, a single file, and SQL makes filtering and counting easy |
-| Frontend | **React 19 + Vite** | Reusable components for the map, sidebar and form, and a fast dev server |
-| Map | **Leaflet + react-leaflet** with OpenStreetMap tiles | Free and needs no API key |
-| Charts | **Recharts** | Simple charts that are easy to write in React |
-| Tests | **pytest** | Covers validation, the importer and every endpoint |
+| Backend (server) | **Python + Flask** | Simple, and enough for a small set of data endpoints |
+| Database | **SQLite** | Built into Python, needs no setup, and is just one file |
+| Frontend (what you see) | **React + Vite** | Splits the page into reusable pieces (map, panel, form), and Vite runs it quickly while developing |
+| Map | **Leaflet** with OpenStreetMap | Free, with no account or key needed |
+| Charts | **Recharts** | Easy charts for React |
+| Tests | **pytest** | Automatically checks the backend works |
 
-There's no router, state library, CSS framework or ORM; the app doesn't need them at this size. See [docs/additional-requirements/ARCHITECTURE.md](docs/additional-requirements/ARCHITECTURE.md) for the reasoning.
+I kept it deliberately small, with no extra libraries the app doesn't need. The reasoning is in [ARCHITECTURE.md](docs/additional-requirements/ARCHITECTURE.md).
 
-**No API keys or secrets are needed.** The Elanco API is public and OpenStreetMap tiles are free.
+**No passwords, API keys or secrets are needed.** Elanco's data service is public and the map is free.
 
 ## Running it locally
 
-Requires Python 3.10+ and Node.js 20+. Run the backend and frontend in two separate terminals.
+You need Python 3.10+ and Node.js 20+. Use two separate terminal windows, one for each part.
 
-**Backend** (http://localhost:5001), which imports the Elanco data on startup:
+**1. Backend** (runs at http://localhost:5001, and downloads the Elanco data when it starts):
 
 ```bash
 cd backend
@@ -52,7 +54,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-**Frontend** (http://localhost:5173), which you then open in a browser:
+**2. Frontend** (runs at http://localhost:5173; open this address in your browser):
 
 ```bash
 cd frontend
@@ -60,51 +62,52 @@ npm install
 npm run dev
 ```
 
-**Tests:** run `python -m pytest` in `backend/` with the virtual environment active.
+**Tests:** in the `backend` folder, with step 1's environment active, run `python -m pytest`.
 
-## API reference
+## The backend's endpoints
 
-All responses are JSON. Errors always have the form `{"error": "...", "details": {"field": "message"}}`.
+These are the addresses the frontend asks for data. Every reply is JSON. If something is wrong, the reply says what, for example `{"error": "Invalid request", "details": {"location": "Please choose one of the listed cities."}}`.
 
-| Method | Endpoint | Description |
+| Request | Address | What it gives back |
 |---|---|---|
-| GET | `/api/health` | Health check |
-| GET | `/api/meta` | Cities (with coordinates) and species (with Latin names) |
-| GET | `/api/sightings` | List sightings, newest first. Filters: `start`, `end` (YYYY-MM-DD, end date included), `city`, `species`. Paging: `limit` (default 500, max 2000) and `offset` |
-| GET | `/api/sightings/<id>` | One sighting, or 404 |
-| POST | `/api/sightings` | Report a sighting. Body: `{"date": "2025-06-01T14:30", "location": "Leeds", "species": "Marsh tick", "notes": "optional"}` |
-| GET | `/api/stats/regions` | Count and latest sighting per city (accepts the same filters) |
-| GET | `/api/stats/trends` | Counts over time. `interval=week\|month`, plus the same filters |
+| GET | `/api/health` | "ok" if the server is running |
+| GET | `/api/meta` | The list of cities (with map positions) and species |
+| GET | `/api/sightings` | Sightings, newest first. Can be narrowed with `start` and `end` dates (YYYY-MM-DD; the end date counts), `city` and `species`. Returns 500 at a time by default (`limit`, up to 2,000), and `offset` gets the next batch |
+| GET | `/api/sightings/<id>` | One sighting |
+| POST | `/api/sightings` | Saves a new report (date, location, species, optional notes) |
+| GET | `/api/stats/regions` | How many sightings each city has, and its latest one (same filters as above) |
+| GET | `/api/stats/trends` | How many sightings per week or per month (same filters) |
 
-## Project structure
+## Where things are
 
 ```
 backend/
-  app.py            Flask app: routes and error handlers
-  importer.py       Fetch, validate and de-duplicate the Elanco data
-  db.py             SQLite schema and queries
-  validation.py     Query filter and submission validation
-  reference.py      City coordinates and the species list
-  tests/            pytest suite
-frontend/
-  src/api.js        Fetch wrapper with consistent error handling
-  src/App.jsx       Layout, tabs and shared state
-  src/components/   MapView, Legend, FilterBar, Sidebar, TrendChart, ReportForm, SpeciesGuide, PreventionTips
-  src/data/         Static educational content
+  app.py            Starts the server and defines the endpoints
+  importer.py       Downloads, checks and de-duplicates Elanco's data
+  db.py             Saves and reads data in the SQLite database
+  validation.py     Checks searches and new reports are valid
+  reference.py      The list of cities (with map positions) and species
+  tests/            Automatic tests
+frontend/src/
+  App.jsx           The page layout and tabs
+  api.js            Talks to the backend
+  components/       Each piece of the page: map, key, filters, city panel, chart, form, guide, tips
+  data/             The tick guide and prevention tips text
 docs/
-  REQUIREMENTS.md   What the MVP covers and what's out of scope
-  PLAN.md           Dependencies and build order
-  OUT_OF_SCOPE.md   What was left out of the MVP and future ideas
-  additional-requirements/   The brief's optional extras:
-    README.md         What's covered and where
-    ARCHITECTURE.md   Design decisions, data flow and future improvements
-    ACCESSIBILITY.md  Accessibility features and known gaps
+  REQUIREMENTS.md          What the app needed to do and what we chose
+  PLAN.md                  The tools we used and the order we built things
+  FUTURE_REQUIREMENTS.md   What we left out and ideas for later
+  GLOSSARY.md              Technical words explained simply
+  additional-requirements/ The brief's optional extras:
+    README.md                What's covered and where
+    ARCHITECTURE.md          How it's built and why
+    ACCESSIBILITY.md         How it's made usable for everyone
 ```
 
 ## Known limitations
 
-- The source data only gives a city, so sightings are shown at city-centre coordinates rather than exact locations.
-- User reports aren't moderated and there's no login.
-- Species descriptions are general guidance, not veterinary or medical advice.
+- Elanco's data only says which city a tick was seen in, so every sighting appears at the city centre rather than its exact spot.
+- Anyone can submit a report, with no login or checking by a person.
+- The tick guide is general information, not advice from a vet or doctor.
 
-See [docs/additional-requirements/ARCHITECTURE.md](docs/additional-requirements/ARCHITECTURE.md#what-i-would-improve-with-more-time) for the full list of future improvements, including a machine-learning tick identifier.
+What we'd add next is in [FUTURE_REQUIREMENTS.md](docs/FUTURE_REQUIREMENTS.md), including image upload and a machine-learning tick identifier.

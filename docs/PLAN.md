@@ -1,54 +1,44 @@
-# Plan & Dependencies
+# Plan and Tools
 
-## Stack
-| Layer | Choice | Why |
+The tools we chose, why, and the order we built things in.
+
+## Tools
+| Part | Choice | Why |
 |---|---|---|
-| Backend | Python 3 + Flask | Minimal, familiar, enough for a handful of JSON endpoints |
-| Storage | SQLite (Python stdlib `sqlite3`) | Zero setup, single file, SQL makes filters and aggregates trivial |
-| Frontend | React + Vite | Component structure for map/sidebar/form; fast dev server |
-| Map | Leaflet + react-leaflet, OpenStreetMap tiles | Free, no API key |
+| Backend | Python + Flask | Simple and familiar, and enough for a small set of endpoints |
+| Database | SQLite (built into Python) | No setup and just one file; easy to search and count data |
+| Frontend | React + Vite | Splits the page into reusable pieces; Vite runs it quickly while developing |
+| Map | Leaflet + react-leaflet, with OpenStreetMap | Free, no key needed |
 
-## Dependencies
+## Packages we install
 
-### Backend (`backend/requirements.txt`)
-- `flask` – web framework
-- `flask-cors` – allow the Vite dev server to call the API
-- `requests` – call the Elanco API with timeouts
-- `pytest` – tests for validation, importer and endpoints *(dev only)*
+### Backend (listed in `backend/requirements.txt`)
+- `flask`: the web server
+- `flask-cors`: lets the frontend talk to the backend while developing
+- `requests`: downloads Elanco's data, with a time limit
+- `pytest`: runs the automatic tests
 
-Everything else (`sqlite3`, `datetime`, `logging`) is standard library.
+Everything else (the database, dates, logging) is built into Python.
 
-### Frontend (`frontend/package.json`)
-- `react`, `react-dom` – UI (from the Vite React template)
-- `vite`, `@vitejs/plugin-react` – dev server / build
-- `leaflet`, `react-leaflet` – map
-- `recharts` – the small per-city monthly trend chart
+### Frontend (listed in `frontend/package.json`)
+- `react`, `react-dom`: build the page
+- `vite`, `@vitejs/plugin-react`: run and build the frontend
+- `leaflet`, `react-leaflet`: the map
+- `recharts`: the city activity chart
 
-No router, state library, CSS framework or ORM – not needed at this size.
+We left out anything the app doesn't need at this size, such as page routing, a styling framework, or extra data-management libraries.
 
-## Project layout
-```
-backend/
-  app.py          # Flask app + routes
-  db.py           # SQLite setup + queries
-  importer.py     # fetch, validate, dedupe Elanco data
-  reference.py    # city coords, species list (+ latin names)
-  validation.py   # submission validation
-  tests/
-frontend/
-  src/components/ # Map, Sidebar, Trend, ReportForm, SpeciesGuide, PreventionTips
-docs/
-```
+## Build order (each step was its own commit)
+1. ✅ Requirements and this plan
+2. ✅ Backend basics: the server, the database, the city and species lists
+3. ✅ Downloading Elanco's data: checking it, removing duplicates, coping when Elanco's service is down
+4. ✅ Endpoints for reading sightings and the city/species lists
+5. ✅ Endpoints for totals per city and over time
+6. ✅ Saving new reports, the rules for them, error replies, and tests
+7. ✅ Frontend basics and the map
+8. ✅ The city side panel and chart
+9. ✅ The report form and its messages
+10. ✅ The species guide, prevention tips and accessibility
+11. ✅ README and architecture document
 
-## Build order (≈ one commit per step)
-1. Docs: requirements + plan ← *this commit*
-2. Backend skeleton: Flask app, SQLite schema, reference data
-3. Importer: fetch / validate / dedupe / fallback
-4. Read endpoints: sightings list + filters, single sighting, meta
-5. Stats endpoints: regions + trends
-6. POST endpoint + validation + error handlers (+ tests)
-7. Frontend skeleton (Vite + React) + map with markers
-8. Sidebar + trend view
-9. Report form with validation messages
-10. Educational sections + accessibility pass
-11. README, ARCHITECTURE.md, final tidy
+**Added after the first version:** the yellow → red colour gradient, the "Not sure / unknown species" option, the map filters, the accessibility document, and these docs rewritten in plain English.
