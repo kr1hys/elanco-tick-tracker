@@ -16,7 +16,7 @@ Built for the **Elanco Placement Program – Full Stack technical task**.
 | Sighting information | Clicking a city opens a sidebar with totals, a trend chart (by year or last 24 months), a species breakdown and recent sightings. |
 | Educational content | Identification guide for the 5 species in the data, plus tick-bite prevention tips for people and pets. |
 | Report a sighting | Form with date, time, city and species dropdowns (including a "Not sure / unknown species" option for people who can't identify their tick) and notes. Shows per-field errors, non-blocking warnings and success messages, and the server validates submissions too. |
-| Accessibility | Skip link, labelled inputs, error messages read out by screen readers, visible focus outlines, a keyboard-friendly city list as an alternative to the map, and markers whose meaning never relies on colour alone. |
+| Accessibility | Skip link, labelled inputs, error messages read out by screen readers, visible focus outlines, a keyboard-friendly city list as an alternative to the map, and markers whose meaning never relies on colour alone. See [ACCESSIBILITY.md](docs/additional-requirements/ACCESSIBILITY.md). |
 
 Backend highlights:
 - Imports data from the Elanco API, checking each record, skipping bad ones and removing duplicates.
@@ -35,7 +35,7 @@ Backend highlights:
 | Charts | **Recharts** | Simple charts that are easy to write in React |
 | Tests | **pytest** | Covers validation, the importer and every endpoint |
 
-There's no router, state library, CSS framework or ORM; the app doesn't need them at this size. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the reasoning.
+There's no router, state library, CSS framework or ORM; the app doesn't need them at this size. See [docs/additional-requirements/ARCHITECTURE.md](docs/additional-requirements/ARCHITECTURE.md) for the reasoning.
 
 **No API keys or secrets are needed.** The Elanco API is public and OpenStreetMap tiles are free.
 
@@ -89,12 +89,15 @@ backend/
 frontend/
   src/api.js        Fetch wrapper with consistent error handling
   src/App.jsx       Layout, tabs and shared state
-  src/components/   MapView, Legend, Sidebar, TrendChart, ReportForm, SpeciesGuide, PreventionTips
+  src/components/   MapView, Legend, FilterBar, Sidebar, TrendChart, ReportForm, SpeciesGuide, PreventionTips
   src/data/         Static educational content
 docs/
   REQUIREMENTS.md   What the MVP covers and what's out of scope
   PLAN.md           Dependencies and build order
-  ARCHITECTURE.md   Design decisions, data flow and future improvements
+  additional-requirements/   The brief's optional extras:
+    README.md         What's covered and where
+    ARCHITECTURE.md   Design decisions, data flow and future improvements
+    ACCESSIBILITY.md  Accessibility features and known gaps
 ```
 
 ## Known limitations
@@ -103,4 +106,4 @@ docs/
 - User reports aren't moderated and there's no login.
 - Species descriptions are general guidance, not veterinary or medical advice.
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#what-i-would-improve-with-more-time) for the full list of future improvements, including a machine-learning tick identifier.
+See [docs/additional-requirements/ARCHITECTURE.md](docs/additional-requirements/ARCHITECTURE.md#what-i-would-improve-with-more-time) for the full list of future improvements, including a machine-learning tick identifier.

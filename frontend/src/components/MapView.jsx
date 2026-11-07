@@ -16,8 +16,9 @@ export default function MapView({ regions, selectedCity, onSelect }) {
   const min = nonZero.length ? Math.min(...nonZero) : 0
 
   return (
-    <MapContainer center={UK_CENTRE} zoom={6} className="map" scrollWheelZoom={false}
-      aria-label="Map of UK tick sightings by city">
+    // react-leaflet doesn't pass aria attributes to the map element, so label a wrapper region.
+    <div role="region" aria-label="Map of UK tick sightings by city. Use the city list below the map to explore with a keyboard.">
+    <MapContainer center={UK_CENTRE} zoom={6} className="map" scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -44,5 +45,6 @@ export default function MapView({ regions, selectedCity, onSelect }) {
         )
       })}
     </MapContainer>
+    </div>
   )
 }

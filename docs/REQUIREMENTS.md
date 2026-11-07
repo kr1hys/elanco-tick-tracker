@@ -92,6 +92,6 @@ Brief requires ≥2 items per area; selected:
 
 ## 7. Deliverables
 - Public GitHub repo with README (project, technical choices, run instructions)
-- `docs/ARCHITECTURE.md` – decisions, data flow, future improvements
+- `docs/additional-requirements/` – the brief's optional extras: `ARCHITECTURE.md` (decisions, data flow, future improvements) and `ACCESSIBILITY.md`
 - Walkthrough video (≤10 min) – recorded by Kieran
 - **Deadline: 2026-11-08, 9am**

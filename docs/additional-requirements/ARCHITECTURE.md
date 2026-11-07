@@ -73,12 +73,7 @@ The frontend's `api.js` turns every failure, including the server being unreacha
 
 ### Accessibility
 
-- Skip link, landmarks (header, nav, main, aside, footer) and a clear heading order.
-- Every input has a label. Fields with errors are marked invalid and linked to their error message. An error summary at the top of the form takes focus and links to each faulty field.
-- Status updates are read out by screen readers.
-- Switching tabs moves focus to the main content.
-- Map markers can be hard to reach by keyboard, so a city button list does the same job. Marker meaning is shown by size, colour and text in the tooltip.
-- Visible focus outlines, high-contrast colours, and animations switched off when the user asks for reduced motion.
+Accessibility was considered throughout: keyboard alternatives to the map, labelled and announced form errors, live regions, focus handling and reduced motion. See **[ACCESSIBILITY.md](ACCESSIBILITY.md)** for the full breakdown and known gaps.
 
 ## Testing
 
