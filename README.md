@@ -4,7 +4,7 @@ A simple web app that shows where ticks have been spotted around the UK, how tha
 
 Built for the **Elanco Placement Program – Full Stack technical task**.
 
-**Author:** Kieran
+**Author:** Kieran M
 
 > New to any of the technical words below? See the [Glossary](docs/GLOSSARY.md).
 
