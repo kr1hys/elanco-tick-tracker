@@ -1,15 +1,15 @@
 import { STOPS } from './colourScale'
 
-export default function Legend({ min, max }) {
+export default function Legend() {
   return (
-    <div className="legend" aria-label={`Map legend: colour runs from yellow at ${min} sightings to red at ${max} sightings; bigger circles mean more sightings`}>
+    <div className="legend" aria-label="Map legend: colour runs from yellow for the fewest sightings to red for the most; bigger circles mean more sightings">
       <span className="legend-title">Sightings per city</span>
       <span className="legend-scale" aria-hidden="true">
-        <span>{min}</span>
+        <span>Least</span>
         <span className="legend-gradient" style={{ background: `linear-gradient(to right, ${STOPS.join(', ')})` }} />
-        <span>{max}</span>
+        <span>Most</span>
       </span>
-      <span className="legend-note">Fewer (yellow, small) → more (red, large)</span>
+      <span className="legend-note">Bigger circle = more sightings</span>
     </div>
   )
 }

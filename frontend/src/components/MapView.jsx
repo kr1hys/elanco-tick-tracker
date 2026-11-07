@@ -14,7 +14,7 @@ export default function MapView({ regions, selectedCity, onSelect }) {
   const min = Math.min(max, ...counts)
 
   return (
-    <MapContainer center={UK_CENTRE} zoom={6} className="map" scrollWheelZoom
+    <MapContainer center={UK_CENTRE} zoom={6} className="map" scrollWheelZoom={false}
       aria-label="Map of UK tick sightings by city">
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

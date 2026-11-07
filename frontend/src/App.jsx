@@ -71,8 +71,7 @@ export default function App() {
               <h2 id="map-heading">Tick sightings across the UK</h2>
               <p className="muted">Click a city on the map (or pick one from the list) to see its details.</p>
               <MapView regions={regions} selectedCity={selectedCity} onSelect={setSelectedCity} />
-              <Legend min={regions.length ? Math.min(...regions.map((r) => r.count)) : 0}
-                max={regions.length ? Math.max(...regions.map((r) => r.count)) : 0} />
+              <Legend />
               {/* Keyboard/screen-reader friendly alternative to clicking map markers */}
               <h3>Cities</h3>
               <ul className="city-list">
