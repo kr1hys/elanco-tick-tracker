@@ -75,6 +75,11 @@ Brief requires ≥2 items per area; selected:
 - Directions / Share buttons, seasonal chart
 - Authentication, moderation of user reports, deployment/hosting
 - Precise geolocation of sightings (data is city-level only)
+- **Photos in the species guide**: a real, species-accurate photo on each tick profile card.
+  Freely licensed photos (Wikimedia Commons) exist for only 2 of the 5 species (*Ixodes canisuga*,
+  *Ixodes frontalis*); generic stand-in photos were rejected as misleading for an identification guide.
+  Would need properly licensed photos for all 5 (e.g. from Elanco or a parasitology partner),
+  shown with photographer credits as the licence requires.
 - **ML tick identifier**: users upload a photo of a tick and a trained image-classification
   model suggests the likely species, with a confidence score and that species' risk to pets/people
   (from the species guide). Would build on image upload above. Rough approach:
