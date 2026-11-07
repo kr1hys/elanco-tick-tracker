@@ -87,6 +87,8 @@ The Elanco API is faked in tests, so they run offline. The frontend was tested b
 
 ## What I would improve with more time
 
+A shorter, non-technical list of everything left out of the MVP is in [../OUT_OF_SCOPE.md](../OUT_OF_SCOPE.md).
+
 **Features (from the brief, left out of the MVP):**
 - **Image upload** with sighting reports: store files in object storage and check their type and size. This matters most for reports marked **unknown species**: the photo would let a professional (e.g. a vet reviewing a queue of unidentified reports) or the ML identifier below confirm the species and update the report, so non-experts can report quickly without guessing.
 - **Searchable city picker**: the city buttons under the map work for 14 cities but would get messy with every UK town and city. Replace them with a single "Choose a city" button that opens a panel (or combobox) with a search box, filtering the list as you type and showing each city's count, plus sorting by name or number of sightings. It must stay fully usable by keyboard and screen reader, since it's the accessible alternative to clicking map markers.

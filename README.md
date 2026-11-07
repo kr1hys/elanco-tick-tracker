@@ -94,6 +94,7 @@ frontend/
 docs/
   REQUIREMENTS.md   What the MVP covers and what's out of scope
   PLAN.md           Dependencies and build order
+  OUT_OF_SCOPE.md   What was left out of the MVP and future ideas
   additional-requirements/   The brief's optional extras:
     README.md         What's covered and where
     ARCHITECTURE.md   Design decisions, data flow and future improvements

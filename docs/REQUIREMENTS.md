@@ -69,26 +69,8 @@ Brief requires ≥2 items per area; selected:
 ## 5. Testing
 - `pytest` tests for submission validation, importer dedupe/invalid-record handling, and the main endpoints (Elanco API mocked).
 
-## 6. Out of scope (documented as future improvements)
-- Image upload with reports, especially for sightings reported as **unknown species**: the photo would let a professional (e.g. a vet or parasitologist reviewing reports) or the ML identifier below work out the species, after which the report is updated
-- Searchable city picker: replace the row of city buttons under the map with a "Choose a city" button that opens a filterable list with a search box, so the UI stays tidy once every UK city is covered (must remain keyboard and screen-reader accessible)
-- Directions / Share buttons, seasonal chart
-- Authentication, moderation of user reports, deployment/hosting
-- Precise geolocation of sightings (data is city-level only)
-- **Photos in the species guide**: a real, species-accurate photo on each tick profile card.
-  Freely licensed photos (Wikimedia Commons) exist for only 2 of the 5 species (*Ixodes canisuga*,
-  *Ixodes frontalis*); generic stand-in photos were rejected as misleading for an identification guide.
-  Would need properly licensed photos for all 5 (e.g. from Elanco or a parasitology partner),
-  shown with photographer credits as the licence requires.
-- **ML tick identifier**: users upload a photo of a tick and a trained image-classification
-  model suggests the likely species, with a confidence score and that species' risk to pets/people
-  (from the species guide). Would build on image upload above. Rough approach:
-  - Train/fine-tune a pre-trained image model (e.g. a small CNN/vision transformer via transfer learning)
-    on labelled tick photos; the main challenge is a good labelled dataset, ideally verified by experts/vets.
-  - Serve it from the Python backend (e.g. `POST /api/identify`) so it fits the existing stack.
-  - Show results as a *suggestion* with confidence, pre-filling the report form's species field;
-    low-confidence results say "unsure - ask your vet". Never presented as a diagnosis.
-  - Confirmed reports could become new training data over time (with consent and moderation).
+## 6. Out of scope
+Everything deliberately left out of the MVP (including the future ML tick identifier, image upload and species photos) is listed in **[OUT_OF_SCOPE.md](OUT_OF_SCOPE.md)**.
 
 ## 7. Deliverables
 - Public GitHub repo with README (project, technical choices, run instructions)
