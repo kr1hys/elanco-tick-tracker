@@ -71,6 +71,7 @@ Brief requires ≥2 items per area; selected:
 
 ## 6. Out of scope (documented as future improvements)
 - Image upload with reports, especially for sightings reported as **unknown species**: the photo would let a professional (e.g. a vet or parasitologist reviewing reports) or the ML identifier below work out the species, after which the report is updated
+- Searchable city picker: replace the row of city buttons under the map with a "Choose a city" button that opens a filterable list with a search box, so the UI stays tidy once every UK city is covered (must remain keyboard and screen-reader accessible)
 - Directions / Share buttons, seasonal chart
 - Authentication, moderation of user reports, deployment/hosting
 - Precise geolocation of sightings (data is city-level only)
