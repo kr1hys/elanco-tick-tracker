@@ -6,6 +6,12 @@ Built for the **Elanco Placement Program – Full Stack technical task**.
 
 **Author:** Kieran M
 
+## Video walkthrough
+
+[![Watch the video walkthrough](https://img.youtube.com/vi/kwlR213pcs4/maxresdefault.jpg)](https://youtu.be/kwlR213pcs4)
+
+A 6-minute tour of the app, the data import, accessibility and the tests.
+
 ---
 
 ## What it does
