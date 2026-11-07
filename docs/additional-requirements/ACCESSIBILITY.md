@@ -27,10 +27,12 @@ Maps are one of the hardest things to make accessible, so the map is **never the
 
 | What we did | Why it helps |
 |---|---|
-| **A list of city buttons under the map** does exactly the same as clicking a circle, and says which city is selected | The map circles can't be reached with Tab, so keyboard and screen-reader users use the list instead |
+| **Every map circle works like a button:** you can Tab to it, it's read out as e.g. "London, 76 sightings", Enter or Space opens the city, and it says which city is selected | Keyboard and screen-reader users can use the map itself, not just a mouse |
+| **The focused circle gets a thick dark ring** and shows its tooltip | Keyboard users can see which city they're on |
+| **A list of city buttons under the map** does the same job too | A quicker alternative, and easier than moving around a map |
 | **Nothing relies on colour alone:** circle *size* shows the count too, the number appears on hover and on each city button, and cities with nothing are grey | Helps people with colour blindness |
 | **The colour key is described in words** for screen readers | The colour bar itself can't be "read", so the words replace it |
-| **The map has a label** that points keyboard users to the city list | Screen-reader users know what the map is and where the alternative is |
+| **The map has a label** explaining how to use it with a keyboard (Tab between cities, Enter to open) | Screen-reader users know what the map is and how to use it |
 | **Scrolling doesn't zoom the map** | Scrolling the page doesn't get stuck on the map |
 
 ## The city panel and chart
@@ -77,12 +79,12 @@ Maps are one of the hardest things to make accessible, so the map is **never the
 - Tested in the browser: the form's errors, warnings and success message, the filters' date error, and the city list as an alternative to the map.
 - Checked that the accessibility features are really present in the page (language, sections, current tab, skip link).
 - Checked the phone layout for sideways scrolling.
-- **Not done yet:** a full run-through using only the keyboard.
+- **A full run-through using only the keyboard:** the skip link, the tabs, the filters, the map circles (Enter and Space), the city list, focus moving when switching tabs, and the form's error summary and its links to each field.
 
 ## What's still missing
 
 - **Not tested with a real screen reader** (such as VoiceOver on Mac or NVDA on Windows). This is the most important next step.
 - **No automatic accessibility checker** yet (tools such as axe or Lighthouse).
-- **The map circles can't be reached with Tab.** The city list covers this for now, and the planned searchable city picker (see [FUTURE_REQUIREMENTS.md](../FUTURE_REQUIREMENTS.md)) must also work with a keyboard.
+- **Tabbing through every city on the map takes 14 presses.** That's fine now, but with every UK town it would be too many. The planned searchable city picker (see [FUTURE_REQUIREMENTS.md](../FUTURE_REQUIREMENTS.md)) would solve this, and must also work with a keyboard.
 - **Yellow circles on the light map** are harder to see. Size, numbers and the city list help, but a darker outline would be better.
 - **The chart's bars can't be explored one by one** with a keyboard. A "view as table" option would fix this.

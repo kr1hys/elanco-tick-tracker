@@ -54,7 +54,7 @@ The brief asks for at least 2 features from each of 4 areas. We built:
 
 ### Accessibility
 - Every form field has a label, and errors are read out by screen readers.
-- Everything can be used with a keyboard. The map's circles can't be reached with the Tab key, so the city list under the map does the same job.
+- Everything can be used with a keyboard, including the map: each circle can be reached with Tab and opened with Enter. The city list under the map does the same job.
 - Good colour contrast, and the map never relies on colour alone: circle size and numbers show the same information.
 
 The full details are in [additional-requirements/ACCESSIBILITY.md](additional-requirements/ACCESSIBILITY.md).

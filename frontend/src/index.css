@@ -141,3 +141,7 @@ main:focus { outline: none; }
   padding: .45rem 1rem; font-weight: 600; cursor: pointer;
 }
 .secondary:disabled { opacity: .45; cursor: default; }
+
+/* Keyboard focus on a map circle: a thick dark ring (SVG shapes ignore normal outlines) */
+.leaflet-interactive:focus { outline: none; }
+.leaflet-interactive:focus-visible { stroke: #1d3557; stroke-width: 5px; }

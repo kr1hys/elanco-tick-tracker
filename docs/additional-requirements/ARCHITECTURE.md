@@ -80,7 +80,7 @@ On the frontend, `api.js` turns every failure (including "can't reach the server
 
 ### Accessibility
 
-Built in throughout: a keyboard-friendly city list as an alternative to the map, labelled form fields with errors read out by screen readers, and more. See **[ACCESSIBILITY.md](ACCESSIBILITY.md)**.
+Built in throughout: map circles that work with the keyboard, a city list as an alternative to the map, labelled form fields with errors read out by screen readers, and more. See **[ACCESSIBILITY.md](ACCESSIBILITY.md)**.
 
 ## Testing
 
