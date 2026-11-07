@@ -6,8 +6,6 @@ Built for the **Elanco Placement Program – Full Stack technical task**.
 
 **Author:** Kieran M
 
-> New to any of the technical words below? See the [Glossary](docs/GLOSSARY.md).
-
 ---
 
 ## What it does
@@ -97,7 +95,6 @@ docs/
   REQUIREMENTS.md          What the app needed to do and what we chose
   PLAN.md                  The tools we used and the order we built things
   FUTURE_REQUIREMENTS.md   What we left out and ideas for later
-  GLOSSARY.md              Technical words explained simply
   additional-requirements/ The brief's optional extras:
     README.md                What's covered and where
     ARCHITECTURE.md          How it's built and why

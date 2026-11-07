@@ -2,7 +2,7 @@
 
 *Brief item: "a short document explaining your architecture decisions, how your system consumes and presents data, and things you would improve with more time."*
 
-This explains how the app gets the tick data, cleans and stores it, and shows it to users, why it's built this way, and what I'd improve. Unfamiliar words are explained in the [Glossary](../GLOSSARY.md).
+This explains how the app gets the tick data, cleans and stores it, and shows it to users, why it's built this way, and what I'd improve.
 
 ## The big picture
 

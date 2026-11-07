@@ -8,7 +8,7 @@ Accessibility means everyone can use the app, including people who:
 - have **low vision or colour blindness**
 - find **complicated forms** hard
 
-We followed the main ideas of WCAG 2.1 AA, the standard accessibility guidelines for websites. The app hasn't been formally tested against them, so we don't claim it fully meets them (see "What's still missing" below). The technical name for each feature is in brackets for anyone who wants it; see also the [Glossary](../GLOSSARY.md).
+We followed the main ideas of WCAG 2.1 AA, the standard accessibility guidelines for websites. The app hasn't been formally tested against them, so we don't claim it fully meets them (see "What's still missing" below). The technical name for each feature is in brackets for anyone who wants it.
 
 ## Getting around the page
 
