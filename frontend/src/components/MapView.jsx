@@ -5,9 +5,9 @@ import { colourAt, NONE_COLOUR, scaleFor } from './colourScale'
 
 const UK_CENTRE = [54.3, -2.5]
 
-const MIN_RADIUS = 8 // quietest city (still easy to click)
-const MAX_RADIUS = 30 // busiest city
-const NONE_RADIUS = 6 // no matching sightings
+const MIN_RADIUS = 13 // quietest city (still easy to click)
+const MAX_RADIUS = 23 // busiest city
+const NONE_RADIUS = 9 // no matching sightings
 
 // Size runs from the quietest city to the busiest, like the colour scale, so
 // differences stay visible even when every city has a similar count. Circle *area*
