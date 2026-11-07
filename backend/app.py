@@ -9,7 +9,7 @@ from werkzeug.exceptions import HTTPException
 
 import db
 import importer
-from reference import CITIES, SPECIES
+from reference import CITIES, SPECIES, UNKNOWN_SPECIES
 from validation import ValidationError, parse_filters, parse_int, validate_submission
 
 DEFAULT_DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ticks.db")
@@ -70,6 +70,7 @@ def create_app(config=None):
         return jsonify({
             "cities": [{"name": n, "lat": lat, "lng": lng} for n, (lat, lng) in CITIES.items()],
             "species": [{"name": n, "latinName": latin} for n, latin in SPECIES.items()],
+            "unknownSpecies": UNKNOWN_SPECIES,
         })
 
     @app.get("/api/sightings")
@@ -125,7 +126,7 @@ def create_app(config=None):
 def to_json(row):
     """DB row -> API shape (camelCase to match the Elanco API)."""
     return {"id": row["id"], "date": row["date"], "location": row["location"],
-            "species": row["species"], "latinName": row["latin_name"],
+            "species": row["species"], "latinName": row["latin_name"] or None,
             "notes": row.get("notes"), "source": row["source"]}
 
 

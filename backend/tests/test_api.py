@@ -68,6 +68,23 @@ def test_create_sighting(client):
     assert client.get("/api/sightings?city=Leeds").get_json()["total"] == 2
 
 
+def test_create_sighting_with_unknown_species(client):
+    resp = client.post("/api/sightings", json={
+        "date": "2025-06-01", "location": "Leeds", "species": "unknown"})
+    assert resp.status_code == 201
+    body = resp.get_json()
+    assert body["species"] == "Unknown" and body["latinName"] is None
+    assert client.get("/api/sightings?species=Unknown").get_json()["total"] == 1
+    assert client.get("/api/meta").get_json()["unknownSpecies"] == "Unknown"
+
+
+def test_import_rejects_unknown_species():
+    import importer
+    rows, stats = importer.clean_records([{"id": "u1", "date": "2024-01-01T00:00:00",
+                                           "location": "Leeds", "species": "Unknown"}])
+    assert rows == [] and stats["skipped_invalid"] == 1
+
+
 def test_create_sighting_validation(client):
     future = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
     resp = client.post("/api/sightings", json={

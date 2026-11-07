@@ -1,7 +1,7 @@
 """Parsing/validation for query filters and new sighting submissions."""
 from datetime import date, datetime, timedelta
 
-from reference import SPECIES, normalise_city, normalise_species
+from reference import SPECIES, normalise_city, normalise_reported_species
 
 NOTES_MAX = 500
 DATETIME_FORMATS = ("%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M", "%Y-%m-%d")
@@ -55,11 +55,11 @@ def parse_filters(args):
             errors["city"] = "Unknown city."
 
     if args.get("species"):
-        species = normalise_species(args["species"])
+        species = normalise_reported_species(args["species"])
         if species:
             filters["species"] = species
         else:
-            errors["species"] = "Unknown species."
+            errors["species"] = "Unrecognised species."
 
     if errors:
         raise ValidationError(errors)
@@ -101,11 +101,11 @@ def validate_submission(payload, now=None):
     elif city is None:
         errors["location"] = "Please choose one of the listed cities."
 
-    species = normalise_species(payload.get("species"))
+    species = normalise_reported_species(payload.get("species"))
     if not payload.get("species"):
         errors["species"] = "Species is required."
     elif species is None:
-        errors["species"] = "Please choose one of the listed species."
+        errors["species"] = "Please choose one of the listed species, or 'Not sure'."
 
     notes = payload.get("notes") or ""
     if not isinstance(notes, str):
@@ -120,6 +120,6 @@ def validate_submission(payload, now=None):
         "date": when.strftime("%Y-%m-%dT%H:%M:%S"),
         "location": city,
         "species": species,
-        "latin_name": SPECIES[species],
+        "latin_name": SPECIES.get(species, ""),  # empty for unknown species
         "notes": notes.strip() or None,
     }

@@ -47,3 +47,12 @@ def normalise_city(value):
 
 def normalise_species(value):
     return _lookup(value, SPECIES)
+
+
+# Users who can't identify their tick can report it as unknown. Only allowed for
+# user reports (the Elanco import still requires a real species).
+UNKNOWN_SPECIES = "Unknown"
+
+
+def normalise_reported_species(value):
+    return _lookup(value, [*SPECIES, UNKNOWN_SPECIES])

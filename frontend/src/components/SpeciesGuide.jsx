@@ -4,7 +4,7 @@ export default function SpeciesGuide({ countsBySpecies = {} }) {
   return (
     <section aria-labelledby="guide-heading">
       <h2 id="guide-heading">Tick species identification guide</h2>
-      <p className="muted">The five species recorded in our sightings data. Most ticks look very similar to the naked eye - if in doubt, ask your vet.</p>
+      <p className="muted">The five species recorded in our sightings data. Most ticks look very similar to the naked eye, so don't worry if you can't tell - you can report a sighting as "Not sure / unknown species".</p>
       <div className="card-grid">
         {SPECIES_GUIDE.map((s) => (
           <article key={s.name} className="panel species-card">

@@ -77,7 +77,7 @@ export default function ReportForm({ meta, onSubmitted }) {
         species: values.species,
         notes: values.notes.trim(),
       })
-      setStatus({ type: 'success', message: `Thank you! Your ${saved.species} sighting in ${saved.location} has been added to the map.`, city: saved.location })
+      setStatus({ type: 'success', message: `Thank you! Your ${saved.latinName ? saved.species : 'tick'} sighting in ${saved.location} has been added to the map.`, city: saved.location })
       setValues(EMPTY)
       setTouched({})
       setServerErrors({})
@@ -147,9 +147,10 @@ export default function ReportForm({ meta, onSubmitted }) {
           <label htmlFor="species">Species *</label>
           <select required {...fieldProps('species')}>
             <option value="">Choose a species…</option>
+            {meta && <option value={meta.unknownSpecies}>Not sure / unknown species</option>}
             {meta?.species.map((s) => <option key={s.name} value={s.name}>{s.name} ({s.latinName})</option>)}
           </select>
-          <p className="hint">Not sure? See the <em>Learn about ticks</em> tab for an identification guide.</p>
+          <p className="hint">Can't tell which tick it is? Choose <strong>Not sure / unknown species</strong> - every sighting still helps. The <em>Learn about ticks</em> tab has a guide if you want to try.</p>
           <FieldError field="species" errors={errors} />
         </div>
 

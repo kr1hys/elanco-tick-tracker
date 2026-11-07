@@ -43,7 +43,7 @@ UK tick sighting data, and a React front end that maps it, explains it, and lets
 ### 2.4 Submission validation (`POST /api/sightings`)
 - `date` – required, valid ISO date/time, not in the future.
 - `location` – required, chosen from a dropdown of the 14 known cities (validated server-side too).
-- `species` – required, must be one of the known species (latin name derived server-side).
+- `species` – required, one of the known species (latin name derived server-side) **or `Unknown`**, so people who can't identify a tick can still report it. The Elanco import still requires a real species.
 - `notes` – optional, max 500 characters.
 
 ## 3. Frontend requirements (React + Vite)
@@ -55,7 +55,7 @@ Brief requires ≥2 items per area; selected:
 | Interactive map | UK map (Leaflet + OpenStreetMap) with one marker per city; marker size and yellow → orange → red gradient reflect sighting count |
 | Sighting information | Sidebar panel on marker click (city details + recent sightings); small monthly trend chart (Recharts) for that city |
 | Educational content | Species identification guide (the 5 species in the data); tick-bite prevention tips |
-| Report a sighting | Form (date, city dropdown, species dropdown, notes); client-side validation with clear error / warning / success messages, plus server errors shown |
+| Report a sighting | Form (date, city dropdown, species dropdown with a "Not sure / unknown species" option, notes); client-side validation with clear error / warning / success messages, plus server errors shown |
 
 ### Accessibility (basics)
 - All form inputs have labels; errors announced via `aria-live`.
@@ -70,7 +70,7 @@ Brief requires ≥2 items per area; selected:
 - `pytest` tests for submission validation, importer dedupe/invalid-record handling, and the main endpoints (Elanco API mocked).
 
 ## 6. Out of scope (documented as future improvements)
-- Image upload with reports
+- Image upload with reports, especially for sightings reported as **unknown species**: the photo would let a professional (e.g. a vet or parasitologist reviewing reports) or the ML identifier below work out the species, after which the report is updated
 - Map filter controls (date range / species) in the UI – the API supports them already
 - Directions / Share buttons, seasonal chart
 - Authentication, moderation of user reports, deployment/hosting

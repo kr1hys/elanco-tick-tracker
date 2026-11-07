@@ -67,6 +67,7 @@ The frontend's `api.js` turns every failure, including the server being unreacha
 - **No router or state library.** `App.jsx` holds the small amount of shared state (selected tab, selected city, city counts). A `refreshKey` counter increases after each submission so the map and sidebar reload.
 - **The map** uses Leaflet circle markers. Circle size scales with the square root of the sighting count, so a city with 4 times the sightings gets a circle with 4 times the area rather than 4 times the width. Colour backs up the size on a continuous yellow → orange → red gradient, scaled from the quietest city to the busiest (`colourScale.js`). Scaling between the lowest and highest counts, rather than from 0, keeps the differences visible when every city has a similar number of sightings. A gradient legend labelled "Least" → "Most" explains it. Zooming with the scroll wheel is turned off so the map doesn't capture page scrolling; users zoom with the +/− buttons, double-click or a pinch.
 - **The sidebar** loads the selected city's sightings once, then works out the species breakdown and recent list from them, and gets its trend data from `/stats/trends`. The chart fills in periods with no sightings as zero, so gaps aren't hidden.
+- **Unknown species:** most people can't tell tick species apart, so the form offers "Not sure / unknown species" (stored as `Unknown` with no Latin name). This removes the need to look the tick up before reporting, and unknown sightings still count on the map and in trends. The Elanco import still rejects records without a real species.
 - **The form** checks fields as you type, using the same rules as the server, so users get instant feedback. The server always re-checks. Errors are worked out fresh on every update, which avoids stale messages. Warnings, such as no time given or a date over a year old, don't block submission.
 
 ### Accessibility
@@ -91,7 +92,7 @@ The Elanco API is faked in tests, so they run offline. The frontend was tested b
 ## What I would improve with more time
 
 **Features (from the brief, left out of the MVP):**
-- **Image upload** with sighting reports: store files in object storage and check their type and size.
+- **Image upload** with sighting reports: store files in object storage and check their type and size. This matters most for reports marked **unknown species**: the photo would let a professional (e.g. a vet reviewing a queue of unidentified reports) or the ML identifier below confirm the species and update the report, so non-experts can report quickly without guessing.
 - **Map filter controls** for date range and species. The API already supports them, so this is frontend-only work.
 - **Directions / Share** buttons, and a **seasonal chart** showing activity by month of the year for a location.
 - **Photos in the species guide**: a real photo of the exact species on each card. Freely licensed photos only exist for 2 of the 5 species (*I. canisuga*, *I. frontalis*). Generic stand-in photos would mislead in an identification guide, so this needs properly licensed photos for all 5, with photographer credits.

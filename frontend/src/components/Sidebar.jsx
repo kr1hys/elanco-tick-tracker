@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { getSightings, getTrends } from '../api'
 import TrendChart from './TrendChart'
 
+const speciesLabel = (name) => (name === 'Unknown' ? 'Unknown species' : name)
+
 const formatDate = (iso) =>
   new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
@@ -54,7 +56,7 @@ export default function Sidebar({ city, region, refreshKey, onClose }) {
           <ul className="species-bars">
             {speciesSorted.map(([name, count]) => (
               <li key={name}>
-                <span>{name}</span>
+                <span>{speciesLabel(name)}</span>
                 <span className="bar" style={{ width: `${(count / speciesSorted[0][1]) * 100}%` }} aria-hidden="true" />
                 <strong>{count}</strong>
               </li>
@@ -65,7 +67,7 @@ export default function Sidebar({ city, region, refreshKey, onClose }) {
           <ol className="recent">
             {sightings.slice(0, 5).map((s) => (
               <li key={s.id}>
-                <strong>{s.species}</strong> <em>({s.latinName})</em>
+                <strong>{speciesLabel(s.species)}</strong>{s.latinName && <> <em>({s.latinName})</em></>}
                 <div className="muted small">
                   {formatDate(s.date)}{s.source === 'user' && ' · reported by a user'}
                 </div>
