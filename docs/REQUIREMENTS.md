@@ -75,6 +75,15 @@ Brief requires ≥2 items per area; selected:
 - Directions / Share buttons, seasonal chart
 - Authentication, moderation of user reports, deployment/hosting
 - Precise geolocation of sightings (data is city-level only)
+- **ML tick identifier**: users upload a photo of a tick and a trained image-classification
+  model suggests the likely species, with a confidence score and that species' risk to pets/people
+  (from the species guide). Would build on image upload above. Rough approach:
+  - Train/fine-tune a pre-trained image model (e.g. a small CNN/vision transformer via transfer learning)
+    on labelled tick photos; the main challenge is a good labelled dataset, ideally verified by experts/vets.
+  - Serve it from the Python backend (e.g. `POST /api/identify`) so it fits the existing stack.
+  - Show results as a *suggestion* with confidence, pre-filling the report form's species field;
+    low-confidence results say "unsure - ask your vet". Never presented as a diagnosis.
+  - Confirmed reports could become new training data over time (with consent and moderation).
 
 ## 7. Deliverables
 - Public GitHub repo with README (project, technical choices, run instructions)
