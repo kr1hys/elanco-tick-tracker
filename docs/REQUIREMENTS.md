@@ -52,7 +52,7 @@ Brief requires ≥2 items per area; selected:
 
 | Area | Features |
 |---|---|
-| Interactive map | UK map (Leaflet + OpenStreetMap) with one marker per city; marker size/colour reflects sighting count |
+| Interactive map | UK map (Leaflet + OpenStreetMap) with one marker per city; marker size and yellow → orange → red gradient reflect sighting count |
 | Sighting information | Sidebar panel on marker click (city details + recent sightings); small monthly trend chart (Recharts) for that city |
 | Educational content | Species identification guide (the 5 species in the data); tick-bite prevention tips |
 | Report a sighting | Form (date, city dropdown, species dropdown, notes); client-side validation with clear error / warning / success messages, plus server errors shown |

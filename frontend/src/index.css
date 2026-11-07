@@ -52,8 +52,8 @@ main:focus { outline: none; }
 
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: .75rem 0; font-size: .9rem; }
 .legend-title { font-weight: 600; }
-.legend-item { display: inline-flex; align-items: center; gap: .35rem; }
-.legend-dot { display: inline-block; border-radius: 50%; border: 1px solid #555; }
+.legend-scale { display: inline-flex; align-items: center; gap: .4rem; font-weight: 600; }
+.legend-gradient { display: inline-block; width: 160px; height: 12px; border-radius: 6px; border: 1px solid #888; }
 .legend-note { color: var(--muted); }
 
 .city-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }

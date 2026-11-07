@@ -1,20 +1,15 @@
-export default function Legend() {
-  const items = [
-    { label: 'High', colour: '#c0392b', size: 20 },
-    { label: 'Medium', colour: '#e67e22', size: 15 },
-    { label: 'Low', colour: '#f1c40f', size: 11 },
-  ]
+import { STOPS } from './colourScale'
+
+export default function Legend({ min, max }) {
   return (
-    <div className="legend" aria-label="Map legend">
-      <span className="legend-title">Activity (relative to busiest city)</span>
-      {items.map((i) => (
-        <span key={i.label} className="legend-item">
-          <span className="legend-dot" aria-hidden="true"
-            style={{ background: i.colour, width: i.size, height: i.size }} />
-          {i.label}
-        </span>
-      ))}
-      <span className="legend-note">Bigger circle = more sightings</span>
+    <div className="legend" aria-label={`Map legend: colour runs from yellow at ${min} sightings to red at ${max} sightings; bigger circles mean more sightings`}>
+      <span className="legend-title">Sightings per city</span>
+      <span className="legend-scale" aria-hidden="true">
+        <span>{min}</span>
+        <span className="legend-gradient" style={{ background: `linear-gradient(to right, ${STOPS.join(', ')})` }} />
+        <span>{max}</span>
+      </span>
+      <span className="legend-note">Fewer (yellow, small) → more (red, large)</span>
     </div>
   )
 }

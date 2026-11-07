@@ -65,7 +65,7 @@ The frontend's `api.js` turns every failure, including the server being unreacha
 ## Frontend
 
 - **No router or state library.** `App.jsx` holds the small amount of shared state (selected tab, selected city, city counts). A `refreshKey` counter increases after each submission so the map and sidebar reload.
-- **The map** uses Leaflet circle markers. Circle size scales with the square root of the sighting count, so a city with 4 times the sightings gets a circle with 4 times the area rather than 4 times the width. Colour bands (High / Medium / Low, relative to the busiest city) back up the size, and both are explained in a legend.
+- **The map** uses Leaflet circle markers. Circle size scales with the square root of the sighting count, so a city with 4 times the sightings gets a circle with 4 times the area rather than 4 times the width. Colour backs up the size on a continuous yellow → orange → red gradient, scaled from the quietest city to the busiest (`colourScale.js`). Scaling between the lowest and highest counts, rather than from 0, keeps the differences visible when every city has a similar number of sightings. A gradient legend shows the actual lowest and highest counts.
 - **The sidebar** loads the selected city's sightings once, then works out the species breakdown and recent list from them, and gets its trend data from `/stats/trends`. The chart fills in periods with no sightings as zero, so gaps aren't hidden.
 - **The form** checks fields as you type, using the same rules as the server, so users get instant feedback. The server always re-checks. Errors are worked out fresh on every update, which avoids stale messages. Warnings, such as no time given or a date over a year old, don't block submission.
 

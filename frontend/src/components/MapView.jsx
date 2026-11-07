@@ -1,22 +1,17 @@
 import { CircleMarker, MapContainer, TileLayer, Tooltip } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import { colourAt, scaleFor } from './colourScale'
 
 const UK_CENTRE = [54.3, -2.5]
-
-// Activity levels: marker size AND colour AND text label, so meaning never relies on colour alone.
-function activityLevel(count, max) {
-  const ratio = max ? count / max : 0
-  if (ratio >= 0.8) return { label: 'High', colour: '#c0392b' }
-  if (ratio >= 0.6) return { label: 'Medium', colour: '#e67e22' }
-  return { label: 'Low', colour: '#f1c40f' }
-}
 
 function radiusFor(count, max) {
   return max ? 8 + 18 * Math.sqrt(count / max) : 8
 }
 
 export default function MapView({ regions, selectedCity, onSelect }) {
-  const max = Math.max(0, ...regions.map((r) => r.count))
+  const counts = regions.map((r) => r.count)
+  const max = Math.max(0, ...counts)
+  const min = Math.min(max, ...counts)
 
   return (
     <MapContainer center={UK_CENTRE} zoom={6} className="map" scrollWheelZoom
@@ -26,7 +21,6 @@ export default function MapView({ regions, selectedCity, onSelect }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {regions.map((r) => {
-        const level = activityLevel(r.count, max)
         const selected = r.city === selectedCity
         return (
           <CircleMarker
@@ -36,13 +30,13 @@ export default function MapView({ regions, selectedCity, onSelect }) {
             pathOptions={{
               color: selected ? '#1d3557' : '#ffffff',
               weight: selected ? 4 : 2,
-              fillColor: level.colour,
+              fillColor: colourAt(scaleFor(r.count, min, max)),
               fillOpacity: 0.85,
             }}
             eventHandlers={{ click: () => onSelect(r.city) }}
           >
             <Tooltip direction="top">
-              <strong>{r.city}</strong>: {r.count} sightings ({level.label})
+              <strong>{r.city}</strong>: {r.count} sightings
             </Tooltip>
           </CircleMarker>
         )
